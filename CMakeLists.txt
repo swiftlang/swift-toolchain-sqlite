@@ -4,7 +4,12 @@ cmake_minimum_required(VERSION 3.12.3)
 project(SQLite
   LANGUAGES C)
 
+# Generate PIC for ELF/MachO targets.
 set(CMAKE_POSITION_INDEPENDENT_CODE YES)
+
+# Use hidden visibility for ELF/MachO targets.
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
 add_library(SQLite3
   Sources/CSQLite/sqlite3.c)
