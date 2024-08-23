@@ -8,13 +8,13 @@ let package = Package(
             name: "sqlite",
             targets: ["sqlite"]),
         .library(
-            name: "SwiftToolchainCSQLite",
-            targets: ["SwiftToolchainCSQLite"]),
+            name: "CSQLite",
+            targets: ["CSQLite"]),
     ],
     targets: [
         .executableTarget(
             name: "sqlite",
-            dependencies: ["SwiftToolchainCSQLite"],
+            dependencies: ["CSQLite"],
             cSettings: [
                 .define("SQLITE_OMIT_LOAD_EXTENSION"),
                 .define("SQLITE_NOHAVE_SYSTEM", .when(platforms: [.macCatalyst, .iOS, .tvOS, .watchOS, .visionOS, .wasi])),
@@ -31,8 +31,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "SwiftToolchainCSQLite",
-            path: "Sources/CSQLite",
+            name: "CSQLite",
             publicHeadersPath: "include",
             linkerSettings: [
                 // Needed for swift_addNewDSOImage
