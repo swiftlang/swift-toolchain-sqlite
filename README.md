@@ -1,7 +1,7 @@
 swift-toolchain-sqlite
 ======================
 
-The [SQLite Amalgamation](https://sqlite.org/amalgamation.html) from sqlite.org as a Swift package, version 3.46.0.
+The [SQLite Amalgamation](https://sqlite.org/amalgamation.html) from sqlite.org as a Swift package.
 
 This is intended as a common infrastructure package for components of the Swift toolchain which depend on SQLite.
 It is not intended as a general-purpose SQLite package, nor does it aim to provide Swift wrapper APIs.
