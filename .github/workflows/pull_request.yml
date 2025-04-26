@@ -12,6 +12,9 @@ jobs:
       linux_build_command: "swift build"
       linux_exclude_swift_versions: '[{"swift_version": "5.8"}]'
       windows_build_command: "swift build"
+      macos_build_command: "xcrun swift build"
+      enable_macos_checks: true
+
   soundness:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
