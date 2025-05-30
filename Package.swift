@@ -24,7 +24,6 @@ let package = Package(
         .define("_WASI_EMULATED_SIGNAL", .when(platforms: [.wasi])),
         .define("_WASI_EMULATED_PROCESS_CLOCKS", .when(platforms: [.wasi])),
         .define("_WASI_EMULATED_GETPID", .when(platforms: [.wasi])),
-        .define("chmod(a,b)=0", .when(platforms: [.wasi])),
       ],
       linkerSettings: [
         .linkedLibrary("wasi-emulated-signal", .when(platforms: [.wasi])),
