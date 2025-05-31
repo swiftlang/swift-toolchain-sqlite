@@ -29,6 +29,7 @@ let package = Package(
         .linkedLibrary("wasi-emulated-signal", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-process-clocks", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-getpid", .when(platforms: [.wasi])),
+        .linkedLibrary("m", .when(platforms: [.linux])),
       ]
     ),
     .target(
