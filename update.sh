@@ -2,7 +2,7 @@
 # Update to the latest SQLite from sqlite.org
 
 year=2025
-version=3490100
+version=3500000
 
 scratch_dir=$(mktemp -d /tmp/XXXXXX)
 curl -L -o "$scratch_dir/sqlite.zip" "https://sqlite.org/$year/sqlite-amalgamation-$version.zip"
