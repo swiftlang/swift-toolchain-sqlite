@@ -1,0 +1,5 @@
+
+module SwiftToolchainCSQLite {
+  header "sqlite3.h"
+  header "sqlite3ext.h"
+}
