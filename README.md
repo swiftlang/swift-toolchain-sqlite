@@ -6,7 +6,8 @@ The [SQLite Amalgamation](https://sqlite.org/amalgamation.html) from sqlite.org 
 This is intended as a common infrastructure package for components of the Swift toolchain which depend on SQLite.
 It is not intended as a general-purpose SQLite package, nor does it aim to provide Swift wrapper APIs.
 
-This package has been tested on macOS, iOS, tvOS, watchOS, visionOS, Mac Catalyst, Linux, Windows, and WebAssembly.
+This build of this package has been validated for macOS, iOS, tvOS, watchOS, visionOS, Mac Catalyst, Linux, Android, Windows, WebAssembly, and FreeBSD.
+On most platforms, the Swift toolchain uses a copy of SQLite provided by the platform SDK or package manager instead of this package.
 
 
 Contributing to /swift-toolchain-sqlite
@@ -19,7 +20,7 @@ Before submitting the pull request, please make sure you have [tested your
  changes](https://github.com/swiftlang/swift/blob/main/docs/ContinuousIntegration.md)
  and that they follow the Swift project [guidelines for contributing
  code](https://swift.org/contributing/#contributing-code). Bug reports should be 
- filed in [the issue tracker](https://github.com/swiftlang/swift-toolchain-sqlite/issues) of 
+ filed in [the issue tracker](https://github.com/swiftlang/swift-toolchain-sqlite/issues) of
  `swift-toolchain-sqlite` repository on GitHub.
 
 To be a truly great community, [Swift.org](https://swift.org/) needs to welcome

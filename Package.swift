@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -29,7 +29,8 @@ let package = Package(
         .linkedLibrary("wasi-emulated-signal", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-process-clocks", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-getpid", .when(platforms: [.wasi])),
-        .linkedLibrary("m", .when(platforms: [.linux])),
+        .linkedLibrary("m", .when(platforms: [.linux, .android])),
+        .linkedLibrary("pthread", .when(platforms: [.custom("freebsd")])),
       ]
     ),
     .target(
