@@ -9,6 +9,11 @@ It is not intended as a general-purpose SQLite package, nor does it aim to provi
 This build of this package has been validated for macOS, iOS, tvOS, watchOS, visionOS, Mac Catalyst, Linux, Android, Windows, WebAssembly, and FreeBSD.
 On most platforms, the Swift toolchain uses a copy of SQLite provided by the platform SDK or package manager instead of this package.
 
+### Compile-time Options
+
+Set the following environment variables to enable the corresponding compile-time options.
+
+- `SQLITE_ENABLE_FTS5=1` to enable [FTS5](https://www.sqlite.org/fts5.html)
 
 Contributing to /swift-toolchain-sqlite
 -------------
