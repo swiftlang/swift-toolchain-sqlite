@@ -16,8 +16,10 @@ jobs:
       macos_build_command: "xcrun swift build"
       macos_exclude_xcode_versions: '[{"xcode_version": "16.0"}, {"xcode_version": "16.1"}]'
       enable_macos_checks: true
+      enable_ios_checks: true
       enable_linux_static_sdk_build: true
       enable_wasm_sdk_build: true
+      enable_android_sdk_build: true
 
   soundness:
     name: Soundness
