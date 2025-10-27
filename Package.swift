@@ -1,5 +1,11 @@
 // swift-tools-version: 6.0
 import PackageDescription
+import Foundation
+
+var toolchainCSettings: [CSetting] = []
+if ProcessInfo.processInfo.environment["SQLITE_ENABLE_FTS5"] == "1" {
+    toolchainCSettings.append(.define("SQLITE_ENABLE_FTS5"))
+}
 
 let package = Package(
   name: "swift-toolchain-sqlite",
@@ -37,6 +43,7 @@ let package = Package(
       name: "SwiftToolchainCSQLite",
       path: "Sources/CSQLite",
       publicHeadersPath: "include",
+      cSettings: toolchainCSettings,
       linkerSettings: [
         // Needed for swift_addNewDSOImage
         .linkedLibrary("swiftCore", .when(platforms: [.windows, .wasi]))
