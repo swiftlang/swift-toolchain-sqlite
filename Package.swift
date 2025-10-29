@@ -29,18 +29,27 @@ let package = Package(
         .linkedLibrary("wasi-emulated-signal", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-process-clocks", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-getpid", .when(platforms: [.wasi])),
+        .linkedLibrary("dl", .when(platforms: [.linux])),
         .linkedLibrary("m", .when(platforms: [.linux, .android])),
-        .linkedLibrary("pthread", .when(platforms: [.custom("freebsd")])),
+        .linkedLibrary("pthread", .when(platforms: [.linux, .custom("freebsd")])),
       ]
     ),
     .target(
       name: "SwiftToolchainCSQLite",
       path: "Sources/CSQLite",
-      publicHeadersPath: "include",
-      linkerSettings: [
-        // Needed for swift_addNewDSOImage
-        .linkedLibrary("swiftCore", .when(platforms: [.windows, .wasi]))
-      ]
+      publicHeadersPath: "include"
     ),
   ]
 )
+
+// Workaround for: undefined symbol: swift_addNewDSOImage
+// (this should be resolved by Swift Build becoming the default build system)
+if Context.environment["GITHUB_JOB"] != "embedded-wasm-sdk-build" {
+  for target in package.targets {
+    if target.name == "SwiftToolchainCSQLite" {
+      target.linkerSettings = [
+        .linkedLibrary("swiftCore", .when(platforms: [.windows, .wasi]))
+      ]
+    }
+  }
+}
