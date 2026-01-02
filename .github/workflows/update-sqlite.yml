@@ -1,0 +1,104 @@
+name: Update SQLite
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  schedule:
+    # Run daily at 9:00 AM PST
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-sqlite:
+    name: Check for SQLite updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check latest SQLite version
+        id: check
+        run: |
+          apt -y update && apt-get -y install curl
+
+          # Fetch the chronology page and extract the latest version
+          page=$(curl -sL -A "Mozilla/5.0" https://sqlite.org/chronology.html)
+
+          # Extract the first (latest) version from the table
+          # The page has rows like: <td><a href="releaselog/3_51_3.html">3.51.3</a></td>
+          latest_version=$(echo "$page" | grep -oP '(?<=releaselog/)[^"]+(?=\.html)' | head -1 | tr '_' '.')
+          if [ -z "$latest_version" ]; then
+            echo "Failed to extract latest version"
+            exit 1
+          fi
+          echo "Latest SQLite version: $latest_version"
+
+          # Extract the year from the date in the same row
+          # Dates appear as YYYY-MM-DD in the table
+          latest_year=$(echo "$page" | grep -oP '\d{4}-\d{2}-\d{2}' | head -1 | cut -d'-' -f1)
+          if [ -z "$latest_year" ]; then
+            echo "Failed to extract year"
+            exit 1
+          fi
+          echo "Release year: $latest_year"
+
+          # Convert dotted version (e.g. 3.51.3) to SQLite numeric format (e.g. 3510300)
+          IFS='.' read -r major minor patch <<< "$latest_version"
+          numeric_version=$(printf "%d%02d%02d00" "$major" "$minor" "$patch")
+          echo "Numeric version: $numeric_version"
+
+          # Read current version from update.sh
+          current_version=$(grep '^version=' update.sh | head -1 | cut -d'=' -f2)
+          echo "Current version: $current_version"
+
+          if [ "$numeric_version" = "$current_version" ]; then
+            echo "Already up to date"
+            echo "updated=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "New version available"
+            echo "updated=true" >> "$GITHUB_OUTPUT"
+            echo "version=$numeric_version" >> "$GITHUB_OUTPUT"
+            echo "year=$latest_year" >> "$GITHUB_OUTPUT"
+            echo "display_version=$latest_version" >> "$GITHUB_OUTPUT"
+            echo "display_version_underscore=$(echo "$latest_version" | tr '.' '_')" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update update.sh
+        if: steps.check.outputs.updated == 'true'
+        run: |
+          sed -i "s/^year=.*/year=${{ steps.check.outputs.year }}/" update.sh
+          sed -i "s/^version=.*/version=${{ steps.check.outputs.version }}/" update.sh
+          echo "Updated update.sh:"
+          head -5 update.sh
+
+      - name: Run update.sh
+        if: steps.check.outputs.updated == 'true'
+        run: |
+          chmod +x update.sh
+          bash update.sh
+
+      - name: Commit, push branch, and create PR
+        if: steps.check.outputs.updated == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global --add safe.directory "$(realpath .)"
+          git config --local user.name 'swift-ci'
+          git config --local user.email 'swift-ci@users.noreply.github.com'
+
+          PR_BRANCH="automated/sqlite-${{ steps.check.outputs.version }}"
+          git checkout -b "$PR_BRANCH"
+          git add -A
+          git commit -m "Update to sqlite ${{ steps.check.outputs.display_version }}"
+          git push --set-upstream origin "$PR_BRANCH"
+
+          gh pr create \
+            --base main \
+            --head "$PR_BRANCH" \
+            --title "Update to sqlite ${{ steps.check.outputs.display_version }}" \
+            --body "Automated update to [SQLite ${{ steps.check.outputs.display_version }}](https://sqlite.org/releaselog/${{ steps.check.outputs.display_version_underscore }}.html).
+
+          See the [SQLite changelog](https://sqlite.org/changes.html) for details." \
+            --draft
