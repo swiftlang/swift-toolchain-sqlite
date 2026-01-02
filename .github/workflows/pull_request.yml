@@ -26,6 +26,21 @@ jobs:
       enable_embedded_wasm_sdk_build: true
       enable_android_sdk_build: true
 
+  source-integrity:
+    name: Source integrity check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Run update.sh and check for modifications
+        run: |
+          bash update.sh
+          if [ -n "$(git diff --name-only)" ]; then
+            echo "::error::Source files do not match the upstream SQLite release. The following files differ:"
+            git diff
+            exit 1
+          fi
+
   soundness:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
