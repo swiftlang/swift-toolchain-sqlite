@@ -1,4 +1,4 @@
-swift-toolchain-sqlite
+swift-toolchain-sqlite 
 ======================
 
 The [SQLite Amalgamation](https://sqlite.org/amalgamation.html) from sqlite.org as a Swift package.
