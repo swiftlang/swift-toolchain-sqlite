@@ -30,8 +30,8 @@ let package = Package(
         .linkedLibrary("wasi-emulated-process-clocks", .when(platforms: [.wasi])),
         .linkedLibrary("wasi-emulated-getpid", .when(platforms: [.wasi])),
         .linkedLibrary("dl", .when(platforms: [.linux])),
-        .linkedLibrary("m", .when(platforms: [.linux, .android])),
-        .linkedLibrary("pthread", .when(platforms: [.linux, .custom("freebsd")])),
+        .linkedLibrary("m", .when(platforms: [.linux, .android, .custom("freebsd"), .openbsd])),
+        .linkedLibrary("pthread", .when(platforms: [.linux, .custom("freebsd"), .openbsd])),
       ]
     ),
     .target(
@@ -52,4 +52,17 @@ if Context.environment["GITHUB_JOB"] != "embedded-wasm-sdk-build" {
       ]
     }
   }
+}
+
+// Build the library as a dylib in CI to ensure it specifies all necessary linkages
+if Context.environment["CI"] == "true"
+  && Context.environment["GITHUB_JOB"] != "wasm-sdk-build"
+  && Context.environment["GITHUB_JOB"] != "embedded-wasm-sdk-build"
+{
+  package.products += [
+    .library(
+      name: "SwiftToolchainCSQLiteDynamic",
+      type: .dynamic,
+      targets: ["SwiftToolchainCSQLite"])
+  ]
 }
