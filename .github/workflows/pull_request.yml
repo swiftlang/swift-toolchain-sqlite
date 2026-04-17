@@ -40,7 +40,7 @@ env:
 jobs:
   tests:
     name: Test
-    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.10
+    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.11
     with:
       linux_os_versions: '["amazonlinux2", "bookworm", "noble", "jammy", "rhel-ubi9"]'
       linux_build_command: "swift build"
