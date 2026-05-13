@@ -31,11 +31,9 @@ install(TARGETS SQLite3
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
-if(MSVC)
-  install(FILES $<TARGET_PDB_FILE:SQLite3>
-    DESTINATION bin
-    OPTIONAL)
-endif()
+install(FILES $<TARGET_PDB_FILE:SQLite3>
+  DESTINATION bin
+  OPTIONAL)
 install(FILES
     Sources/CSQLite/include/sqlite3.h
     Sources/CSQLite/include/sqlite3ext.h
