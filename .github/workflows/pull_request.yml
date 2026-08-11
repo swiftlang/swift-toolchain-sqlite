@@ -40,7 +40,7 @@ env:
 jobs:
   tests:
     name: Test
-    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.11
+    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.12
     with:
       linux_os_versions: '["amazonlinux2", "bookworm", "noble", "jammy", "rhel-ubi9"]'
       linux_build_command: "swift build"
@@ -71,7 +71,7 @@ jobs:
       options: --device /dev/kvm
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Write cloud-init files
         run: |
@@ -98,7 +98,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Run update.sh and check for modifications
         run: |
           bash update.sh
